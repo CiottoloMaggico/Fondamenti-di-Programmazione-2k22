@@ -1,0 +1,6 @@
+test01/D.txt
+Pianta
+Piano
+Pongo
+Pinguino
+Ciao
