@@ -1,15 +1,14 @@
-def valid_position(index, player, opponent, board, params):
-    offsets, board = [-params[0], +params[0], +1, -1, -params[0]+1, -
-                      params[0]-1, +params[0]+1, +params[0]-1], board.copy()
+def valid_position(x, y, player, opponent, board, params):
+    flips, board = [(0, -1), (-1, -1), (-1, 0), (-1, 1), (0, 1),
+                    (1, 1), (1, 0), (+1, -1)], list(map(list.copy, board))
 
-    for offset in offsets:
-        temp_index = index + offset
-        print(temp_index)
-        if 0 <= temp_index < params[1] and board[temp_index] == opponent:
-            board[temp_index] = player
-            board[index] = player
+    for temp_x, temp_y in flips:
+        x_, y_ = x+temp_x, y+temp_y
+        if ((0 <= x_ < params[0]) and (0 <= y_ < params[1])) and board[y_][x_] == opponent:
+            board[y_][x_] = player
+            board[y][x] = player
 
-    if board[index] != ".":
+    if board[y][x] != ".":
         return board
     return False
 
@@ -44,17 +43,9 @@ def tree_builder(table, player, opponent, params, empties, score, cache={}, mast
 def dumbothello(filename: str) -> tuple[int, int, int]:
     with open(filename, "r") as board:
         board = [line.split() for line in board.readlines()]
-    params = len(board[0])+1
-    board = list(
-        map(str, "".join(["".join(line)+" " for line in board])))
-
-    params = (params, len(board))
-    empties = [index for index in range(len(board)) if board[index] == "."]
-    print(board)
-    is_valid = valid_position(6, "B", "W", board, params)
-    # final, cache = tree_builder(board, "W", "B", params, empties, {
-    #                             "B": (1, 0, 0), "W": (0, 1, 0), "ODD": (0, 0, 1)})
-    return is_valid, board
-
-
-print(dumbothello("boards/01.txt"))
+    params = (len(board[0]), len(board))
+    empties = [(x, y) for x in range(params[0])
+               for y in range(params[1]) if board[y][x] == "."]
+    final, cache = tree_builder(board, "W", "B", params, empties, {
+                                "B": (1, 0, 0), "W": (0, 1, 0), "ODD": (0, 0, 1)})
+    return final
