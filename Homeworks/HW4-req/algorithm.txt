@@ -1,0 +1,12 @@
+Procedimento:
+
+Dopo aver analizzato il problema su carta, analizzando possibili input, ho deciso di suddividere il mio programma
+in due parti principali.
+Nella prima definisco la funzione "load_files", che carica i vari file di testo uno ad uno attraverso un ciclo while, nel quale, prima estraggo
+la path del file successivo e poi procedo leggendo l'intero file, contando le occorrenze delle parole attraverso un dizionario.
+Eseguo questo procedimento fino a che non torno al path del file con cui ho iniziato, a questo punto ritorno il dizionario con le occorrenze delle parole.
+Fatto ciò definisco la funzione "most_frequent_chars" che come prima cosa richiama "load_files" caricando il dizionario delle parole,
+successivamente procedo contando tutte le occorrenze delle lettere che salvo in una lista di dizionari, avendo già contato tutte le parole
+posso direttamente addizionare nella posizione corrispondente alla lettera nel dizionario che corrisponde all'indice della lettera nella parola, il numero di volte
+che quella determinata parola viene vista nei file, inoltre ad ogni ciclo controllo se la lettera analizzata può sostituire quella vincente nella stringa finale, se si la aggiungo con delle slice.
+Procedo così fino ad esaurire le parole, ritornando alla fine la stringa risultato.

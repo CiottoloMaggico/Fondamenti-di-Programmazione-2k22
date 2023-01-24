@@ -1,0 +1,39 @@
+Dopo aver analizzato il problema su carta, suddividendolo in parti più piccole, procedo con l'implementazione.
+Definisco le 3 funzioni principali del programma:
+
+1) Dumbothello(filename):
+    in questa funzione per prima cosa apro il file contenente la board, poi procedo come segue:
+    - inizializzo una variabile board che contiene la board salvata nel file
+    - definisco una variabile params che contiene: (lunghezza riga, lunghezza totale board)
+    - salvo le coordinate degli spazi vuoti in una lista "empties"
+    - chiamo la funzione tree_builder() che ha il compito di costruire le casistiche
+
+2) tree_builder(table, player, opponent, params, empties, score, cache, masterkey):
+    - inizializzo a, b, c = 0, 0, 0
+    - controllo il caso base della ricorsione:
+        empties è vuoto ? se si tramite un dizionario conto "B" e "W" e ritorno lo score del nodo
+        per esempio: se vince il Bianco ritorno (0, 1, 0)
+    - se empties non è vuoto procedo come segue:
+        - per ogni index in empties:
+            board = valid_position(index, opponent, player, table)
+            se il valore di board non è Falso, quindi la posizione index è valida
+                creo una key univoca dello stato della board
+                se la key è in cache:
+                    prendo il punteggio da cache[key]
+                sennò:
+                    rimuovo index da empties
+                    avvio la ricorsione per il nodo che sto analizzando con
+                    tree_builder(board, opponent, player, params, empties, score, cache, key) 
+                    una volta terminata la ricorsione salvo il valore trovato in cache[key]
+                    ri inserisco index a empties
+
+            aggiorno il valore di a, b, c sommando ad ognuno cache[key]
+
+        - controllo se la somma di a+b+c == 0
+            se lo è vuol dire che non c'è stata nessuna posizione valida e quindi conto il numero di "B" e "W" e ritorno il vincitore
+
+        - return (a,b,c), cache
+
+3) valid_position(index, player, opponent, board, params):
+    questa funzione ha il semplice compito di controllare se una determinata posizione è valida,
+    se lo è mi restituisce la board corrispondente all'inserimento del player all'interno della board data in input, modificando gli adiacenti
